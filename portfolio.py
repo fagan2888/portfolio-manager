@@ -1,3 +1,5 @@
+"""Builds a portfolio object containing asset allocation details."""
+
 import decimal
 from googlefinance import getQuotes
 
@@ -7,6 +9,15 @@ USDCAD = DEC(getQuotes('CURRENCY:USDCAD')[0]['LastTradePrice'])
 
 
 def init_portfolio(filename):
+    """Returns a portfolio object containing positional, categorical, and
+     portfolio totals.
+
+     Usage:
+     call init_portfolio(filename) with a csv file with at LEAST the
+     following columns:
+        ticker,qty,target%,category,currency
+    """
+
     portfolio = {
         'positions': {},
         'categories': {},
@@ -31,6 +42,8 @@ def init_portfolio(filename):
 
 
 def _populate_market_values(portfolio):
+    """Populates positional, categorical, and portfolio market values."""
+
     quotes = getQuotes(portfolio['positions'].keys())
     for quote in quotes:
         ticker = quote['StockSymbol']
@@ -46,6 +59,8 @@ def _populate_market_values(portfolio):
 
 
 def _populate_asset_allocations(portfolio):
+    """Populates categorical current and target allocations."""
+
     for category in portfolio['categories'].values():
         category['current%'] = category['mktvalue'] / portfolio['total']
         category['target'] = category['target%'] * portfolio['total']
@@ -53,9 +68,16 @@ def _populate_asset_allocations(portfolio):
 
 
 def _needs_rebalance(category):
-    pct_diff = abs(category['current%'] - category['target%'])
+    """Determines whether the given asset category needs to be rebalanced.
+
+    Uses the Swedroe 5/25 Rebalancing Rule. See here:
+    http://awealthofcommonsense.com/larry-swedroe-525-rebalancing-rule/
+    """
+
+    target_pct, current_pct = category['target%'], category['current%']
+    pct_diff = abs(target_pct - current_pct)
     return (
-        (category['target%'] < 0.2 and pct_diff < 0.05)
+        (target_pct < 0.2 and pct_diff > 0.05)
         or
-        (category['target%'] >= 0.2 and pct_diff > DEC(0.25) * category['target%'])
+        (target_pct >= 0.2 and pct_diff > DEC(0.25) * target_pct)
     )
