@@ -77,7 +77,7 @@ def _needs_rebalance(category):
     target_pct, current_pct = category['target%'], category['current%']
     pct_diff = abs(target_pct - current_pct)
     return (
-        (target_pct < 0.2 and pct_diff > 0.05)
+        (target_pct >= 0.2 and pct_diff > 0.05)
         or
-        (target_pct >= 0.2 and pct_diff > DEC(0.25) * target_pct)
+        (target_pct < 0.2 and pct_diff > DEC(0.25) * target_pct)
     )
