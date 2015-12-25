@@ -1,5 +1,6 @@
 """Builds a portfolio object containing asset allocation details."""
 
+import time
 import decimal
 from googlefinance import getQuotes
 
@@ -19,6 +20,7 @@ def init_portfolio(filename):
     """
 
     portfolio = {
+        'asof': time.time(),
         'positions': {},
         'categories': {},
         'total': DEC(0)
