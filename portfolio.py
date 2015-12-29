@@ -20,7 +20,7 @@ def init_portfolio(filename):
     """
 
     portfolio = {
-        'asof': time.time(),
+        'asof': int(time.time()),
         'positions': {},
         'categories': {},
         'total': DEC(0)
@@ -67,6 +67,13 @@ def _populate_asset_allocations(portfolio):
         category['current%'] = category['mktvalue'] / portfolio['total']
         category['target'] = category['target%'] * portfolio['total']
         category['rebalance'] = _needs_rebalance(category)
+        category['sortkey'] = category['name']
+        if category['name'] == 'Other':
+            category['sortkey'] = 'ZZ'
+    portfolio['categories'] = portfolio['categories'].values()
+    portfolio['categories'].sort(key=lambda c: c['sortkey'])
+    for category in portfolio['categories']:
+        del category['sortkey']
 
 
 def _needs_rebalance(category):

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+<h1>My Portfolio</h1>
+<div class="row">
+<div class="col-xs-12">
+<p class="pull-right">As Of {{positions['asof'] | time }}</p>
+</div>
+</div>
+<table class="table">
+<thead>
+<tr>
+    <th>Category</th>
+    <th><div class="pull-right">Target %</div></th>
+    <th><div class="pull-right">Current %</div></th>
+    <th><div class="pull-right">Target $</div></th>
+    <th><div class="pull-right">Market Value</div></th>
+</tr>
+</thead>
+<tbody>
+{% for category in positions['categories'] %}
+<tr class="{{ 'danger' if category['rebalance'] else '' }}">
+    <td>{{ category['name'] }}</td>
+    <td><div class="pull-right">{{ category['target%'] | pct }}%</div></td>
+    <td><div class="pull-right">{{ category['current%'] | pct }}%</div></td>
+    <td><div class="pull-right">{{ category['target'] | money }}</div></td>
+    <td><div class="pull-right">{{ category['mktvalue'] | money }}</div></td>
+{% endfor %}
+</tr>
+</tbody>
+<tfoot>
+<tr>
+    <td colspan="4"><div class="pull-right">Total Market Value</div></td>
+    <td><div class="pull-right">{{ positions['total'] | money }}</div></td>
+</tr>
+</tfoot>
+</table>
+</div>
+</body>
+</html>
