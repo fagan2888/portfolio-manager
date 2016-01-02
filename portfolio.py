@@ -6,7 +6,6 @@ from googlefinance import getQuotes
 
 
 DEC = decimal.Decimal
-USDCAD = DEC(getQuotes('CURRENCY:USDCAD')[0]['LastTradePrice'])
 
 
 def init_portfolio(filename):
@@ -23,7 +22,8 @@ def init_portfolio(filename):
         'asof': int(time.time()),
         'positions': {},
         'categories': {},
-        'total': DEC(0)
+        'total': DEC(0),
+        'usdcad': DEC(getQuotes('CURRENCY:USDCAD')[0]['LastTradePrice'])
     }
     with open(filename) as f:
         keys = f.readline().strip().split(',')
@@ -55,7 +55,7 @@ def _populate_market_values(portfolio):
         category = portfolio['categories'][position['category']]
         position['mktvalue'] = position['qty'] * DEC(quote['LastTradePrice'])
         if position['currency'] == 'USD':
-            position['mktvalue'] *= USDCAD
+            position['mktvalue'] *= portfolio['usdcad']
         category['mktvalue'] += position['mktvalue']
         portfolio['total'] += position['mktvalue']
 

@@ -25,9 +25,12 @@
         </div>
     </div>
 <div class="row">
-<div class="col-xs-12">
-<p class="pull-right">As Of {{positions['asof'] | time }}</p>
-</div>
+    <div class="col-xs-6">
+        <p>1 USD = {{ positions['usdcad'] }} CAD</p>
+    </div>
+    <div class="col-xs-6">
+        <p class="pull-right">As Of {{positions['asof'] | time }}</p>
+    </div>
 </div>
 <table class="table">
 <thead>
