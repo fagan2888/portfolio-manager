@@ -57,7 +57,7 @@ def moneyfmt(value, places=2, curr='$', sep=',', dp='.',
 def timefmt(value, formatstr='%b %d %Y, %I:%M:%S %p %Z'):
     """Converts a unix timestamp in seconds to the given format. """
 
-    return time.strftime(formatstr, time.gmtime(value))
+    return time.strftime(formatstr, time.localtime(value))
 
 
 def pctfmt(value):
