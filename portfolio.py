@@ -2,8 +2,7 @@
 
 import time
 import decimal
-from googlefinance import getQuotes
-
+from stockretriever import get_current_info
 
 DEC = decimal.Decimal
 
@@ -23,7 +22,7 @@ def init_portfolio(filename):
         'positions': {},
         'categories': {},
         'total': DEC(0),
-        'usdcad': DEC(getQuotes('CURRENCY:USDCAD')[0]['LastTradePrice'])
+        'usdcad': DEC(get_current_info(['USDCAD=X'])['LastTradePriceOnly'])
     }
     with open(filename) as f:
         keys = f.readline().strip().split(',')
@@ -32,11 +31,15 @@ def init_portfolio(filename):
             position['qty'] = DEC(position['qty'])
             position['target%'] = DEC(position['target%']) / 100
             portfolio['positions'][position['ticker']] = position
-            portfolio['categories'][position['category']] = {
-                'name': position['category'],
-                'mktvalue': DEC(0),
-                'target%': position['target%']
-            }
+            category = portfolio['categories'].setdefault(
+                position['category'], {
+                    'name': position['category'],
+                    'mktvalue': DEC(0),
+                    'target%': position['target%'],
+                    'tickers': []
+                }
+            )
+            category['tickers'].append(position['ticker'])
 
     _populate_market_values(portfolio)
     _populate_asset_allocations(portfolio)
@@ -46,15 +49,14 @@ def init_portfolio(filename):
 def _populate_market_values(portfolio):
     """Populates positional, categorical, and portfolio market values."""
 
-    quotes = getQuotes(portfolio['positions'].keys())
+    quotes = get_current_info(portfolio['positions'].keys())
     for quote in quotes:
-        ticker = quote['StockSymbol']
-        if ticker not in portfolio['positions']:
-            ticker = quote['Index'] + ':' + ticker
+        ticker = quote['symbol']
+        price = DEC(quote['LastTradePriceOnly'])
         position = portfolio['positions'][ticker]
         category = portfolio['categories'][position['category']]
-        position['mktvalue'] = position['qty'] * DEC(quote['LastTradePrice'])
-        if position['currency'] == 'USD':
+        position['mktvalue'] = position['qty'] * price
+        if quote['Currency'] == 'USD':
             position['mktvalue'] *= portfolio['usdcad']
         category['mktvalue'] += position['mktvalue']
         portfolio['total'] += position['mktvalue']
