@@ -1,0 +1,7 @@
+ticker,qty,category,target%
+VSB.TO,100,Canadian Fixed Income,10
+VUN.TO,100,US Equity,30
+XEC.TO,80,Emerging Markets,10
+XEF.TO,100,International Equity,15
+ZCN.TO,200,Canadian Equity,25
+ZRE.TO,100,Canadian REIT,10
