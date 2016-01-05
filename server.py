@@ -1,6 +1,7 @@
 import decimal
 import json
-from flask import Flask, render_template, request, session, redirect, url_for, abort
+from flask import (Flask, render_template, request,
+                   session, redirect, url_for, abort)
 from passlib.hash import pbkdf2_sha256
 from utils.formatters import timefmt, moneyfmt, pctfmt
 import config
@@ -24,14 +25,18 @@ def login():
             </form>
         '''
     else:
-        print 'here'
-        print app.config
         uname = request.form['username']
         passwd = request.form['password']
-        if uname is not None and pbkdf2_sha256.verify(passwd, app.config['PASSWORD']):
+        if (uname is not None and pbkdf2_sha256.verify(passwd, app.config['PASSWORD'])):
             session['uname'] = uname
             return redirect(url_for('index'))
     abort(401)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('uname', None)
+    return redirect(url_for('login'))
 
 
 @app.route('/')
