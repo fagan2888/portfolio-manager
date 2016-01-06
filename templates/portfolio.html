@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Portfolio</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <style>
     .vcenter {
         display: inline-block;
@@ -13,6 +14,24 @@
         float: none;
     }
     </style>
+    <script>
+        var hasFocus = true;
+
+        function refresh(){
+            if(hasFocus){
+                window.location.href = '?force_refresh=true';
+            }
+        }
+
+        $(document).ready(function(e){
+            $(window).focus(function(){
+                hasFocus = true;
+            }).blur(function() {
+                hasFocus = false;
+            });
+            setInterval(refresh, 10000);
+        });
+    </script>
 </head>
 <body>
 <div class="container">
@@ -22,8 +41,7 @@
         </div><!--
      --><div class="col-xs-6 vcenter">
             <p class="pull-right">
-            <a class="btn btn-info" href="?force_refresh=true"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>
-            <a class="btn btn-info" href="/logout">Logout</a>
+                <a class="btn btn-info" href="/logout">Logout</a>
             </p>
         </div>
     </div>
