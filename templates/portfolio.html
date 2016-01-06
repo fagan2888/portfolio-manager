@@ -57,9 +57,9 @@
 <thead>
 <tr>
     <th>Category</th>
-    <th>Ticker(s)</th>
-    <th><div class="pull-right">Target %</div></th>
-    <th><div class="pull-right">Current %</div></th>
+    <th class="hidden-xs">Ticker(s)</th>
+    <th class="hidden-xs"><div class="pull-right">Target %</div></th>
+    <th class="hidden-xs"><div class="pull-right">Current %</div></th>
     <th><div class="pull-right">Target $</div></th>
     <th><div class="pull-right">Market Value</div></th>
 </tr>
@@ -68,13 +68,13 @@
 {% for category in positions['categories'] %}
 <tr class="{{ 'danger' if category['rebalance'] else '' }}">
     <td>{{ category['name'] }}</td>
-    <td>
+    <td class="hidden-xs">
         {% for ticker in category['tickers'] %}
             <a target="_blank" href="https://finance.yahoo.com/q?s={{ ticker }}">{{ ticker }}</a><br>
         {% endfor %}
     </td>
-    <td><div class="pull-right">{{ category['target%'] | pct }}%</div></td>
-    <td><div class="pull-right">{{ category['current%'] | pct }}%</div></td>
+    <td class="hidden-xs"><div class="pull-right">{{ category['target%'] | pct }}%</div></td>
+    <td class="hidden-xs"><div class="pull-right">{{ category['current%'] | pct }}%</div></td>
     <td><div class="pull-right">{{ category['target'] | money }}</div></td>
     <td><div class="pull-right">{{ category['mktvalue'] | money }}</div></td>
 {% endfor %}
@@ -82,7 +82,11 @@
 </tbody>
 <tfoot>
 <tr>
-    <td colspan="5"><div class="pull-right">Total Market Value</div></td>
+    <td></td>
+    <td class="hidden-xs"></td>
+    <td class="hidden-xs"></td>
+    <td class="hidden-xs"></td>
+    <td><div class="pull-right">Total Market Value</div></td>
     <td><div class="pull-right">{{ positions['total'] | money }}</div></td>
 </tr>
 </tfoot>
