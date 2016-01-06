@@ -15,20 +15,25 @@
     }
     </style>
     <script>
-        var hasFocus = true;
+
+        var hidden; 
+        if (typeof document.hidden !== "undefined") {
+            hidden = "hidden";
+        } else if (typeof document.mozHidden !== "undefined") {
+            hidden = "mozHidden";
+        } else if (typeof document.msHidden !== "undefined") {
+            hidden = "msHidden";
+        } else if (typeof document.webkitHidden !== "undefined") {
+            hidden = "webkitHidden";
+        }    
 
         function refresh(){
-            if(hasFocus){
+            if(!document[hidden]){
                 window.location.href = '?force_refresh=true';
             }
         }
 
         $(document).ready(function(e){
-            $(window).focus(function(){
-                hasFocus = true;
-            }).blur(function() {
-                hasFocus = false;
-            });
             setInterval(refresh, 10000);
         });
     </script>
