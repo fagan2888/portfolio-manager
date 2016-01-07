@@ -1,11 +1,11 @@
 import decimal
 import json
-from flask import (Flask, render_template, request,
+from flask import (Flask, render_template, request, jsonify,
                    session, redirect, url_for, abort)
 from passlib.hash import pbkdf2_sha256
 from utils.formatters import timefmt, moneyfmt, pctfmt
 import config
-import portfolio
+from portfolio import init_portfolio
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -43,13 +43,12 @@ def logout():
 def index():
     if session.get('uname', None) is None:
         return redirect(url_for('login'))
+    return render_template('portfolio.html', portfolio=init_portfolio(config.POSITIONS_FILE))
 
-    if request.args.get('force_refresh', '') != '':
-        positions = portfolio.init_portfolio(config.POSITIONS_FILE)
-    else:
-        with open('positions.json') as f:
-            positions = json.loads(f.read(), parse_float=decimal.Decimal)
-    return render_template('portfolio.html', positions=positions)
+@app.route('/positions')
+def get_positions():
+    if session.get('uname', None) is None:
+        return redirect(url_for('login'))
+    return jsonify(portfolio=init_portfolio(config.POSITIONS_FILE))
 
-
-app.run(debug=True)
+app.run(host='0.0.0.0', debug=True)

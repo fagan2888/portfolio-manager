@@ -7,6 +7,7 @@
     <title>My Portfolio</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/static/js/template.js"></script>
     <style>
     .vcenter {
         display: inline-block;
@@ -14,9 +15,84 @@
         float: none;
     }
     </style>
+    <script type="text/html" id="table_tmpl">
+    <table class="table">
+    <thead>
+    <tr>
+        <th>Category</th>
+        <th class="hidden-xs">Ticker(s)</th>
+        <th class="hidden-xs"><div class="pull-right">Target %</div></th>
+        <th class="hidden-xs"><div class="pull-right">Current %</div></th>
+        <th><div class="pull-right">Target $</div></th>
+        <th><div class="pull-right">Market Value</div></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% for (var i = 0; i < portfolio['categories'].length; i++) { var category = portfolio['categories'][i]; %>
+    <tr class="<%= category['rebalance']? 'danger': '' %>">
+        <td><%= category['name'] %></td>
+        <td class="hidden-xs">
+            <% for (var j = 0; j < category['tickers'].length; j++) { var ticker = category['tickers'][j]; %>
+                <a target="_blank" href="https://finance.yahoo.com/q?s=<%= ticker %>"><%= ticker %></a><br>
+            <% } %>
+        </td>
+        <td class="hidden-xs"><div class="pull-right"><%= formatters.pct(category['target%']) %>%</div></td>
+        <td class="hidden-xs"><div class="pull-right"><%= formatters.pct(category['current%']) %>%</div></td>
+        <td><div class="pull-right"><%= formatters.money(category['target']) %></div></td>
+        <td><div class="pull-right"><%= formatters.money(category['mktvalue']) %></div></td>
+    <% } %>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td></td>
+        <td class="hidden-xs"></td>
+        <td class="hidden-xs"></td>
+        <td class="hidden-xs"></td>
+        <td><div class="pull-right">Total Market Value</div></td>
+        <td><div class="pull-right"><%= formatters.money(portfolio['total']) %></div></td>
+    </tr>
+    </tfoot>
+    </table>
+
+    </script>
+    <script type="text/html" id="header_tmpl">
+    <div class="row">
+        <div class="col-xs-6 vcenter">
+            <h1>My Portfolio</h1>
+        </div><!--
+     --><div class="col-xs-6 vcenter">
+            <p class="pull-right">
+                <a class="btn btn-info" href="/logout">Logout</a>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6">
+            <p>1 USD = <%= portfolio['usdcad'] %> CAD</p>
+        </div>
+        <div class="col-xs-6">
+            <p class="pull-right">As Of <%= formatters.dt(portfolio['asof']) %></p>
+        </div>
+    </div>
+    </script>    
     <script>
 
+        var formatters = {
+            money: function(val){
+                return val.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+            },
+            pct: function(val){
+                return (val * 100).toFixed(2) + '%';
+            },
+            dt: function(val){
+                return (new Date(val * 1000)).toString();    
+            }
+        };
+
         var hidden; 
+        var $container, $header, $table;
+
         if (typeof document.hidden !== "undefined") {
             hidden = "hidden";
         } else if (typeof document.mozHidden !== "undefined") {
@@ -29,73 +105,33 @@
 
         function refresh(){
             if(!document[hidden]){
-                window.location.href = '?force_refresh=true';
+                $.ajax('/positions', {
+                    success: function(data){
+                        render(data);
+                    },
+                    error: function(){
+                        $('body').find('.error').show();
+                    }
+                });
             }
         }
 
+        function render(data){
+            $container.html($header(data))
+                      .append($table(data));
+        }
+
         $(document).ready(function(e){
+            $container = $('.container');
+            $header = tmpl('header_tmpl');
+            $table = tmpl('table_tmpl');
+            render({portfolio:{{portfolio|tojson|safe}}});
             setInterval(refresh, 10000);
         });
     </script>
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <div class="col-xs-6 vcenter">
-            <h1>My Portfolio</h1>
-        </div><!--
-     --><div class="col-xs-6 vcenter">
-            <p class="pull-right">
-                <a class="btn btn-info" href="/logout">Logout</a>
-            </p>
-        </div>
-    </div>
-<div class="row">
-    <div class="col-xs-6">
-        <p>1 USD = {{ positions['usdcad'] }} CAD</p>
-    </div>
-    <div class="col-xs-6">
-        <p class="pull-right">As Of {{positions['asof'] | time }}</p>
-    </div>
-</div>
-<table class="table">
-<thead>
-<tr>
-    <th>Category</th>
-    <th class="hidden-xs">Ticker(s)</th>
-    <th class="hidden-xs"><div class="pull-right">Target %</div></th>
-    <th class="hidden-xs"><div class="pull-right">Current %</div></th>
-    <th><div class="pull-right">Target $</div></th>
-    <th><div class="pull-right">Market Value</div></th>
-</tr>
-</thead>
-<tbody>
-{% for category in positions['categories'] %}
-<tr class="{{ 'danger' if category['rebalance'] else '' }}">
-    <td>{{ category['name'] }}</td>
-    <td class="hidden-xs">
-        {% for ticker in category['tickers'] %}
-            <a target="_blank" href="https://finance.yahoo.com/q?s={{ ticker }}">{{ ticker }}</a><br>
-        {% endfor %}
-    </td>
-    <td class="hidden-xs"><div class="pull-right">{{ category['target%'] | pct }}%</div></td>
-    <td class="hidden-xs"><div class="pull-right">{{ category['current%'] | pct }}%</div></td>
-    <td><div class="pull-right">{{ category['target'] | money }}</div></td>
-    <td><div class="pull-right">{{ category['mktvalue'] | money }}</div></td>
-{% endfor %}
-</tr>
-</tbody>
-<tfoot>
-<tr>
-    <td></td>
-    <td class="hidden-xs"></td>
-    <td class="hidden-xs"></td>
-    <td class="hidden-xs"></td>
-    <td><div class="pull-right">Total Market Value</div></td>
-    <td><div class="pull-right">{{ positions['total'] | money }}</div></td>
-</tr>
-</tfoot>
-</table>
 </div>
 </body>
 </html>
