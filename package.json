@@ -1,7 +1,7 @@
 {
-  "name": "reacttest",
+  "name": "portfoliomanager",
   "version": "0.0.0",
-  "description": "testing react",
+  "description": "keep your investment portfolio balanced",
   "main": "main.js",
   "dependencies": {
     "babelify": "~7.2.0",
@@ -20,6 +20,6 @@
     "build": "browserify -t [ babelify --presets [react] ] client/js/main.js | uglifyjs -c -m -o static/js/app.js",
     "dev": "browserify -t [ babelify --presets [react] ] client/js/main.js -o static/js/app.js"
   },
-  "author": "",
-  "license": "BSD-2-Clause"
+  "author": "Gurchet Rai",
+  "license": "MIT"
 }

@@ -2,7 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var $ = require('jquery');
 var PortfolioHeader = require('./portfolio-header');
-var PortfolioTable = require('./portfolio-table')
+var PortfolioTable = require('./portfolio-table');
 
 var AppView = React.createClass({
     getInitialState: function(){

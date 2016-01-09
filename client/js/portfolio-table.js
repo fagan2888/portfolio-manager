@@ -1,15 +1,28 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
 var PortfolioCategoryRow = require('./portfolio-category-row');
+var PortfolioCategoryPositions = require('./portfolio-category-positions');
 var formatters = require('./formatters');
 
 var PortfolioTable = React.createClass({
     render: function(){
         var categoryNodes = this.props.categories.map(function(category, idx){
-            return (
-                <PortfolioCategoryRow category={category} key={idx} />
-            );
-        });
+            var categoryPositions = [];
+            for(var key in this.props.positions){
+                var position = this.props.positions[key];
+                if(position['category'] == category['name']){
+                    categoryPositions.push(position);
+                }
+            }
+
+            return ([
+                    <PortfolioCategoryRow key={idx} category={category} />,
+                    <tr key={"child-" + idx}>
+                        <td colSpan="6">
+                            <PortfolioCategoryPositions positions={categoryPositions} />
+                        </td>
+                    </tr>
+            ]);
+        }, this);
 
         return (
             <table className="table">
