@@ -1,0 +1,25 @@
+{
+  "name": "reacttest",
+  "version": "0.0.0",
+  "description": "testing react",
+  "main": "main.js",
+  "dependencies": {
+    "babelify": "~7.2.0",
+    "react": "~0.14.6",
+    "babel-preset-react": "~6.3.13",
+    "react-dom": "~0.14.6",
+    "jquery": "~2.2.0"
+  },
+  "devDependencies": {
+    "uglify-js": "~2.6.1",
+    "browserify": "~12.0.2",
+    "watchify": "~3.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify -t [ babelify --presets [react] ] client/js/main.js | uglifyjs -c -m -o static/js/app.js",
+    "dev": "browserify -t [ babelify --presets [react] ] client/js/main.js -o static/js/app.js"
+  },
+  "author": "",
+  "license": "BSD-2-Clause"
+}

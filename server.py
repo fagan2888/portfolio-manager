@@ -39,11 +39,13 @@ def logout():
     return redirect(url_for('login'))
 
 
+
 @app.route('/')
 def index():
     if session.get('uname', None) is None:
         return redirect(url_for('login'))
-    return render_template('portfolio.html', portfolio=init_portfolio(config.POSITIONS_FILE))
+    return render_template('index.html', portfolio=init_portfolio(config.POSITIONS_FILE))
+
 
 @app.route('/positions')
 def get_positions():
