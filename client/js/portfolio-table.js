@@ -4,6 +4,16 @@ var PortfolioCategoryPositions = require('./portfolio-category-positions');
 var formatters = require('./formatters');
 
 var PortfolioTable = React.createClass({
+    getInitialState: function(){
+        return {expandedCategory: ''};
+    },
+    onCategoryClick: function(categoryName){
+        if(this.state.expandedCategory === categoryName){
+            this.setState({expandedCategory: ''});
+        } else {
+            this.setState({expandedCategory: categoryName});
+        }
+    },
     render: function(){
         var categoryNodes = this.props.categories.map(function(category, idx){
             var categoryPositions = [];
@@ -14,13 +24,14 @@ var PortfolioTable = React.createClass({
                 }
             }
 
+            var showDetails = this.state.expandedCategory == category['name']? 'show-row': 'hide';
             return ([
-                    <PortfolioCategoryRow key={idx} category={category} />,
-                    <tr key={"child-" + idx}>
-                        <td colSpan="6">
-                            <PortfolioCategoryPositions positions={categoryPositions} />
-                        </td>
-                    </tr>
+                <PortfolioCategoryRow key={idx} category={category} onCategoryClick={this.onCategoryClick} />,
+                <tr key={"child-" + idx} className={showDetails}>
+                    <td colSpan="6">
+                        <PortfolioCategoryPositions positions={categoryPositions} />
+                    </td>
+                </tr>
             ]);
         }, this);
 

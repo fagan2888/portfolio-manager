@@ -2,6 +2,9 @@ var React = require('react');
 var formatters = require('./formatters');
 
 var PortfolioCategoryRow = React.createClass({
+    onRowClick: function(e){
+        this.props.onCategoryClick(this.props.category.name);
+    },
     render: function(){
         var tickerNodes = this.props.category.tickers.map(function(ticker, idx){
             return (
@@ -10,7 +13,7 @@ var PortfolioCategoryRow = React.createClass({
         });
 
         return (
-            <tr className="cat { this.props.category.rebalance? 'danger': '' }" data-toggle="collapse" data-target="#catdtl{ this.props.category.key }">
+            <tr className="cat { this.props.category.rebalance? 'danger': '' }" onClick={this.onRowClick}>
                 <td>{ this.props.category.name }</td>
                 <td className="hidden-xs">
                     {tickerNodes}
