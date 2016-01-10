@@ -8,7 +8,8 @@ var PortfolioCategoryRow = React.createClass({
     render: function(){
         var tickerNodes = this.props.category.tickers.map(function(ticker, idx){
             return (
-                <a style={{display:'block'}} target="_blank" href="https://finance.yahoo.com/q?s={ticker}" key={idx}>{ticker}</a>
+                <a style={{display:'block'}} target="_blank" href={"https://finance.yahoo.com/q?s=" + ticker} key={idx}>{ticker}</a>
+
             );        
         });
 
