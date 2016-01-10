@@ -14,7 +14,7 @@ var PortfolioCategoryRow = React.createClass({
         });
 
         return (
-            <tr className="cat { this.props.category.rebalance? 'danger': '' }" onClick={this.onRowClick}>
+            <tr className={"cat " + (this.props.category.rebalance? 'danger': '') } onClick={this.onRowClick}>
                 <td>{ this.props.category.name }</td>
                 <td className="hidden-xs">
                     {tickerNodes}
