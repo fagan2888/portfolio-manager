@@ -12,27 +12,14 @@ var PortfolioCategoryPositions = React.createClass({
     onCancelClick: function(){
         this.setState({editMode: false});
     },
-    render: function(){
-        var positionNodes = this.props.positions.map(function(position, idx){
-            var qtyNode = <td className="text-right">{position.qty}</td>;
-
-            if(this.state.editMode){
-                qtyNode = <td><input style={{marginBottom: '5px'}} type="text" defaultValue={position.qty} className="pull-right text-right form-control" /></td>; 
-            }
-
-            return (
-                <tr key={idx}>
-                    <td>{position.ticker}</td>
-                    {qtyNode}
-                    <td className="text-right">{formatters.money(position.mktvalue)}</td>
-                </tr>
-            );
-        }, this);
-
+    getActionsNode: function(){
         var actions = (
             <tr>
                 <td colSpan="3">
-                    <button onClick={this.onEditClick} className="btn btn-success pull-right">Edit</button>
+                    <button onClick={this.onEditClick} 
+                            className="btn btn-success pull-right">
+                        Edit
+                    </button>
                 </td>
             </tr>
         );
@@ -41,13 +28,47 @@ var PortfolioCategoryPositions = React.createClass({
             actions = (
                 <tr>
                     <td colSpan="3">
-                        <button style={{marginLeft: '5px'}} onClick={this.onCancelClick} className="btn btn-success pull-right">Cancel</button>
-                        <button className="btn btn-success pull-right">Save</button>
+                        <button style={{marginLeft: '5px'}} 
+                                onClick={this.onCancelClick} 
+                                className="btn btn-success pull-right">
+                            Cancel
+                        </button>
+                        <button className="btn btn-success pull-right">
+                            Save
+                        </button>
                     </td>
                 </tr>
             );
         }
+        return actions;
+    },
+    getQuantityNode: function(qty){
+        var qtyNode = <td className="text-right">{qty}</td>;
 
+        if(this.state.editMode){
+            qtyNode = (
+                <td>
+                    <input style={{marginBottom: '5px'}} 
+                           type="text" 
+                           defaultValue={qty} 
+                           className="pull-right text-right form-control" />
+                </td>
+            ); 
+        }
+        return qtyNode;
+    },
+    render: function(){
+        var positionNodes = this.props.positions.map(function(position, idx){
+            return (
+                <tr key={idx}>
+                    <td>{position.ticker}</td>
+                    {this.getQuantityNode(position.qty)}
+                    <td className="text-right">{formatters.money(position.mktvalue)}</td>
+                </tr>
+            );
+        }, this);
+
+        
         return (    
             <table style={{width:'100%'}}>
                 <thead>
@@ -61,7 +82,7 @@ var PortfolioCategoryPositions = React.createClass({
                 {positionNodes}
                 </tbody>
                 <tfoot>
-                {actions}
+                {this.getActionsNode()}
                 </tfoot>
             </table>
         );    
