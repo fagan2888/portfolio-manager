@@ -16,23 +16,26 @@ var PortfolioTable = React.createClass({
     },
     render: function(){
         var categoryNodes = this.props.categories.map(function(category, idx){
-            var categoryPositions = [];
-            for(var key in this.props.positions){
-                var position = this.props.positions[key];
-                if(position['category'] == category['name']){
-                    categoryPositions.push(position);
+            var nodes = [ 
+                <PortfolioCategoryRow key={idx} category={category} onCategoryClick={this.onCategoryClick} />
+            ];
+            if(this.state.expandedCategory === category['name']){
+                var categoryPositions = [];
+                for(var key in this.props.positions){
+                    var position = this.props.positions[key];
+                    if(position['category'] == category['name']){
+                        categoryPositions.push(position);
+                    }
                 }
+                nodes.push(
+                    <tr>
+                        <td colSpan="6">
+                            <PortfolioCategoryPositions positions={categoryPositions} />
+                        </td>
+                    </tr>
+                );
             }
-
-            var showDetails = this.state.expandedCategory == category['name']? 'show-row': 'hide';
-            return ([
-                <PortfolioCategoryRow key={idx} category={category} onCategoryClick={this.onCategoryClick} />,
-                <tr key={"child-" + idx} className={showDetails}>
-                    <td colSpan="6">
-                        <PortfolioCategoryPositions positions={categoryPositions} />
-                    </td>
-                </tr>
-            ]);
+            return nodes;
         }, this);
 
         return (
