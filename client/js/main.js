@@ -33,12 +33,11 @@ var AppView = React.createClass({
     toggleEditMode: function(){
         this.setState({editMode: !this.state.editMode});
     },
-    savePositions: function(positions){
+    savePositions: function(positions){    
         for(var ticker in positions){
             this.state.positions[ticker].qty = positions[ticker].qty;
         }
-        this.setState({positions: this.state.positions});
-        
+
         $.ajax(this.props.resource, {
             method: 'POST',
             contentType: 'application/json',
@@ -47,6 +46,15 @@ var AppView = React.createClass({
             }),
             success: this.refresh
         });
+
+        // remove any zero quantity entries from state
+        for(var ticker in this.state.positions){
+            if(this.state.positions[ticker].qty === 0){
+                delete this.state.positions[ticker];
+            }
+        }
+
+        this.setState({positions: this.state.positions});
     },
     render: function(){
         return (

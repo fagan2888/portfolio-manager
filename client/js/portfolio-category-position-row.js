@@ -5,7 +5,7 @@ var PortfolioCategoryPositionRow = React.createClass({
     onQuantityChange: function(){
         this.props.onPositionChange({
             ticker: this.props.position.ticker,
-            qty: this.refs.qty.value
+            qty: parseFloat(this.refs.qty.value)
         });    
     },
     render: function(){
