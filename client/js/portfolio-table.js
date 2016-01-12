@@ -30,7 +30,7 @@ var PortfolioTable = React.createClass({
                 nodes.push(
                     <tr>
                         <td colSpan="6">
-                            <PortfolioCategoryPositions positions={categoryPositions} />
+                            <PortfolioCategoryPositions positions={categoryPositions} savePositions={this.props.savePositions} />
                         </td>
                     </tr>
                 );

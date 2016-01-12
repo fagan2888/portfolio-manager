@@ -20,13 +20,30 @@ var AppView = React.createClass({
                 // todo
             }
         });
-
+    },
+    savePositions: function(positions){
+        for(var ticker in positions){
+            this.state.positions[ticker].qty = positions[ticker].qty;
+        }
+        this.setState({positions: this.state.positions});
+        
+        $.ajax(this.props.resource, {
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                positions: this.state.positions
+            }) 
+        });
     },
     render: function(){
         return (
             <div>
-                <PortfolioHeader usdcad={this.state.usdcad} asof={this.state.asof} />
-                <PortfolioTable categories={this.state.categories} positions={this.state.positions} total={this.state.total}/>
+                <PortfolioHeader usdcad={this.state.usdcad} 
+                                 asof={this.state.asof} />
+                <PortfolioTable categories={this.state.categories} 
+                                positions={this.state.positions} 
+                                total={this.state.total}
+                                savePositions={this.savePositions} />
             </div>
         );
     }
