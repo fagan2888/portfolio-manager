@@ -19,7 +19,7 @@ var AppView = React.createClass({
         setInterval(this.refresh, this.props.pollInterval);
     },
     refresh: function(){
-        if(!this.state.editMode){
+        if(!document.hidden && !this.state.editMode){
             $.ajax(this.props.resource, {
                 success: function(data){
                     this.setState(data.portfolio);
