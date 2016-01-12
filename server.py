@@ -4,15 +4,11 @@ from functools import wraps
 from flask import (Flask, render_template, request, jsonify,
                    session, redirect, url_for, abort)
 from passlib.hash import pbkdf2_sha256
-from utils.formatters import timefmt, moneyfmt, pctfmt
 import config
 from portfolio import init_portfolio
 
 app = Flask(__name__)
 app.config.from_object(config)
-app.jinja_env.filters['time'] = timefmt
-app.jinja_env.filters['money'] = moneyfmt
-app.jinja_env.filters['pct'] = pctfmt
 
 
 def login_required(f):
