@@ -17,12 +17,15 @@ var PortfolioCategoryPositions = React.createClass({
     onSaveClick: function(){
         this.props.savePositions(this.state.positions);
         this.setState({editMode: false});
+        this.props.toggleEditMode();
     },
     onEditClick: function(){
         this.setState({editMode: true});
+        this.props.toggleEditMode();
     },
     onCancelClick: function(){
         this.setState({editMode: false});
+        this.props.toggleEditMode();
     },
     render: function(){
         var positionNodes = this.props.positions.map(function(position, idx){

@@ -6,20 +6,32 @@ var PortfolioTable = require('./portfolio-table');
 
 var AppView = React.createClass({
     getInitialState: function(){
-        return portfolio;
+        return {
+            editMode: false,
+            asof: portfolio.asof,
+            usdcad: portfolio.usdcad,
+            categories: portfolio.categories,
+            positions: portfolio.positions,
+            total: portfolio.total
+        };
     },
     componentDidMount: function(){
         setInterval(this.refresh, this.props.pollInterval);
     },
     refresh: function(){
-        $.ajax(this.props.resource, {
-            success: function(data){
-                this.setState(data.portfolio);
-            }.bind(this),
-            error: function(){
-                // todo
-            }
-        });
+        if(!this.state.editMode){
+            $.ajax(this.props.resource, {
+                success: function(data){
+                    this.setState(data.portfolio);
+                }.bind(this),
+                error: function(){
+                    // todo
+                }
+            });
+        }
+    },
+    toggleEditMode: function(){
+        this.setState({editMode: !this.state.editMode});
     },
     savePositions: function(positions){
         for(var ticker in positions){
@@ -32,7 +44,8 @@ var AppView = React.createClass({
             contentType: 'application/json',
             data: JSON.stringify({
                 positions: this.state.positions
-            }) 
+            }),
+            success: this.refresh
         });
     },
     render: function(){
@@ -43,7 +56,8 @@ var AppView = React.createClass({
                 <PortfolioTable categories={this.state.categories} 
                                 positions={this.state.positions} 
                                 total={this.state.total}
-                                savePositions={this.savePositions} />
+                                savePositions={this.savePositions} 
+                                toggleEditMode={this.toggleEditMode} />
             </div>
         );
     }
