@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Portfolio - Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <style>
+        .login-form {
+            max-width: 330px;
+            margin: 30px auto;
+            background-color: #F3F5F5;
+            border: 1px solid #CCC;
+            padding: 20px;
+            box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);
+        }
+
+        .username-input {
+            border-radius: 4px 4px 0px 0px;
+        }
+
+        .password-input {
+            border-radius: 0px 0px 4px 4px;
+            box-shadow: none;
+        }
+
+        .password-input:focus {
+            box-shadow: 0 0 8px rgba(102,175,233,.6);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form class="login-form" action="/login" method="post">
+        <input type="text" name="username" class="form-control username-input input-lg" placeholder="username">
+        <input type="password" name="password" class="form-control password-input input-lg" placeholder="password">
+        <input type="submit" class="btn btn-success btn-lg" style="margin-top:20px; width: 100%" value="Sign In"> 
+    </form>
+</div>
+</body>
+</html>

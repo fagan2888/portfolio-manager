@@ -23,13 +23,7 @@ def login_required(f):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return '''
-            <form action="" method="post">
-                <input type="text" placeholder="Username" name="username">
-                <input type="password" placeholder="Password" name="password">
-                <input type="submit" value="Login">
-            </form>
-        '''
+        return app.send_static_file('login.html')
     else:
         uname = request.form['username']
         passwd = request.form['password']
