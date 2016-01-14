@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 var $ = require('jquery');
 var PortfolioHeader = require('./portfolio-header');
 var PortfolioTable = require('./portfolio-table');
+var CategoricalBreakdownChart = require('./categorical-breakdown-chart');
 
 var AppView = React.createClass({
     getInitialState: function(){
@@ -60,7 +61,10 @@ var AppView = React.createClass({
         return (
             <div>
                 <PortfolioHeader usdcad={this.state.usdcad} 
-                                 asof={this.state.asof} />
+                                 asof={this.state.asof} />        
+                <CategoricalBreakdownChart 
+                    categories={this.state.categories} 
+                    categoryColors={this.state.categoryColors} />
                 <PortfolioTable categories={this.state.categories} 
                                 positions={this.state.positions} 
                                 total={this.state.total}
