@@ -37,15 +37,17 @@ var CategoricalBreakdownChart = React.createClass({
 
         var options = {
             responsive: true,
-            maintainAspectRatio: true
+            maintainAspectRatio: false
         };
 
         return (
-            <div style={style}>
-                <BarChart data={chartData} 
-                          options={options}
-                          width="800" 
-                          height="400" />
+            <div className="row">
+                <div className="col-xs-12 col-md-8 col-md-offset-2">
+                    <BarChart data={chartData} 
+                              options={options}
+                              width="800" 
+                              height="400" />
+                </div>
             </div>
         );
     }
