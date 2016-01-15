@@ -25,10 +25,10 @@ def save_portfolio():
     with open('archive/' + positions_filename, 'w') as f:
         f.write(positions_json)
 
-    with open('stats/mktval.txt', 'w') as f:
+    with open('stats/mktval.txt', 'a') as f:
         f.write(ymd + ',' + str(positions['total']) + '\n')
 
-    with open('stats/catmktval.txt', 'w') as f:
+    with open('stats/catmktval.txt', 'a') as f:
         for category in positions['categories']:
             f.write((
                 ymd + ',' +
@@ -37,7 +37,7 @@ def save_portfolio():
                 '\n'
             ))
 
-    with open('stats/posmktval.txt', 'w') as f:
+    with open('stats/posmktval.txt', 'a') as f:
         for ticker, position in positions['positions'].iteritems():
             f.write((
                 ymd + ',' +
