@@ -4,6 +4,7 @@ var $ = require('jquery');
 var PortfolioHeader = require('./portfolio-header');
 var PortfolioTable = require('./portfolio-table');
 var CategoricalBreakdownChart = require('./categorical-breakdown-chart');
+var MarketValueChart = require('./market-value-chart');
 
 var AppView = React.createClass({
     getInitialState: function(){
@@ -13,7 +14,8 @@ var AppView = React.createClass({
             usdcad: portfolio.usdcad,
             categories: portfolio.categories,
             positions: portfolio.positions,
-            total: portfolio.total
+            total: portfolio.total,
+            mktvalues: portfolio.mktvalues
         };
     },
     componentDidMount: function(){
@@ -62,6 +64,7 @@ var AppView = React.createClass({
             <div>
                 <PortfolioHeader usdcad={this.state.usdcad} 
                                  asof={this.state.asof} />        
+                <MarketValueChart mktvalues={this.state.mktvalues} />
                 <CategoricalBreakdownChart 
                     categories={this.state.categories} 
                     categoryColors={this.state.categoryColors} />
