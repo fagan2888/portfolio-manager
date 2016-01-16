@@ -8,7 +8,10 @@
     "react": "~0.14.6",
     "babel-preset-react": "~6.3.13",
     "react-dom": "~0.14.6",
-    "jquery": "~2.2.0"
+    "jquery": "~2.2.0",
+    "chart.js": "~1.0.2",
+    "react-chartjs": "~0.6.0",
+    "chart.js-scatter": "~1.1.2"
   },
   "devDependencies": {
     "uglify-js": "~2.6.1",
@@ -19,7 +22,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "buildjs": "browserify -t [ babelify --presets [react] ] client/js/main.js | uglifyjs -c -m -o static/js/app.js",
-    "mincss": "uglifycss client/css/app.css > static/css/app.min.css", 
+    "mincss": "uglifycss client/css/app.css > static/css/app.min.css",
     "build": "npm run buildjs && npm run mincss"
   },
   "author": "Gurchet Rai",

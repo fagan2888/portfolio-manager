@@ -28,13 +28,6 @@ var CategoricalBreakdownChart = React.createClass({
             chartData.datasets[1].data.push((category['current%'] * 100).toFixed(2));
         }, this);
         
-        var style = {
-            maxWidth: '800px',
-            maxHeight: '400px',
-            display: 'block',
-            margin: '0 auto'
-        };
-
         var options = {
             responsive: true,
             maintainAspectRatio: false
