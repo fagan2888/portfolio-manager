@@ -9,4 +9,3 @@ module.exports = {
         return (new Date(val * 1000)).toString();    
     }
 };
-

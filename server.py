@@ -43,9 +43,20 @@ def logout():
 @app.route('/')
 @login_required
 def index():
+    mktvals = []
+    with open('stats/mktval.txt') as f:
+        for line in f:
+            mktvals.append(dict(zip(
+                ['date','mktvalue'],
+                line.strip().split(',')
+            )))
+
+    portfolio=init_portfolio(config.POSITIONS_FILE)
+    portfolio['mktvalues'] = mktvals
+
     return render_template(
         'index.html',
-        portfolio=init_portfolio(config.POSITIONS_FILE)
+        portfolio=portfolio
     )
 
 
