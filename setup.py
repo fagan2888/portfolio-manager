@@ -21,6 +21,8 @@ setup(
         'Programming Language :: Python :: 2.7'
     ],
     keywords='investment portfolio',
+    dependency_links=['https://github.com/gurch101/StockScraper/tarball/master#egg=stockretriever-1.0'],
+    zip_safe=True,
     setup_requires=[
         'stockretriever==1.0',
         'Flask==0.10.1',
