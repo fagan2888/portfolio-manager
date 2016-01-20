@@ -1,3 +1,4 @@
+import decimal
 from shutil import move
 from os import remove
 from functools import wraps
@@ -10,6 +11,7 @@ from portfolio import init_portfolio
 app = Flask(__name__)
 app.config.from_object(config)
 
+DEC = decimal.Decimal
 
 def login_required(f):
     @wraps(f)
@@ -46,10 +48,13 @@ def index():
     mktvals = []
     with open('stats/mktval.txt') as f:
         for line in f:
-            mktvals.append(dict(zip(
-                ['date','mktvalue'],
+            entry = dict(zip(
+                ['date', 'mktvalue'],
                 line.strip().split(',')
-            )))
+            ))
+            entry['mktvalue'] = DEC(entry['mktvalue'])
+            mktvals.append(entry)
+
 
     portfolio=init_portfolio(config.POSITIONS_FILE)
     portfolio['mktvalues'] = mktvals
@@ -90,4 +95,4 @@ def set_positions():
     move('tmp.txt', config.POSITIONS_FILE)
     return '', 200
 
-app.run(host='0.0.0.0', debug=True)
+app.run(host='0.0.0.0')
